@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>にほんご — Learn Japanese</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100;300;400;700&family=Cinzel+Decorative:wght@400;700&family=Raleway:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ========== SIDEBAR ========== -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <span class="logo-jp">日</span>
+      <span class="logo-text">にほんご</span>
+    </div>
+
+    <nav class="sidebar-nav">
+      <button class="nav-btn active" data-section="hiragana">
+        <span class="nav-icon">あ</span>
+        <span class="nav-label">Hiragana</span>
+      </button>
+      <button class="nav-btn" data-section="practice">
+        <span class="nav-icon">⚡</span>
+        <span class="nav-label">Practice</span>
+      </button>
+      <button class="nav-btn" data-section="words">
+        <span class="nav-icon">語</span>
+        <span class="nav-label">Words</span>
+      </button>
+      <button class="nav-btn" data-section="sentences">
+        <span class="nav-icon">文</span>
+        <span class="nav-label">Sentences</span>
+      </button>
+      <button class="nav-btn" data-section="grammar">
+        <span class="nav-icon">法</span>
+        <span class="nav-label">Grammar</span>
+      </button>
+      <button class="nav-btn" data-section="tests">
+        <span class="nav-icon">✎</span>
+        <span class="nav-label">Tests</span>
+      </button>
+      <button class="nav-btn" data-section="progress">
+        <span class="nav-icon">◈</span>
+        <span class="nav-label">Progress</span>
+      </button>
+      <button class="nav-btn" data-section="ai">
+        <span class="nav-icon">✦</span>
+        <span class="nav-label">AI Tools</span>
+        <span class="badge">Soon</span>
+      </button>
+    </nav>
+
+    <div class="sidebar-streak">
+      <span class="streak-fire">🔥</span>
+      <span class="streak-count" id="streak-count">0</span>
+      <span class="streak-label">day streak</span>
+    </div>
+  </aside>
+
+  <!-- Mobile top bar -->
+  <div class="topbar">
+    <button class="menu-toggle" id="menu-toggle">☰</button>
+    <span class="topbar-title">にほんご</span>
+    <span class="topbar-score" id="topbar-score">0 XP</span>
+  </div>
+
+  <!-- ========== MAIN CONTENT ========== -->
+  <main class="main" id="main">
+
+    <!-- ===== HIRAGANA SECTION ===== -->
+    <section class="section active" id="section-hiragana">
+      <div class="section-header">
+        <h1>ひらがな <span class="subtitle">Hiragana Chart</span></h1>
+        <p class="section-desc">Click any character to hear its pronunciation. Master all 46 characters!</p>
+      </div>
+
+      <!-- Row filter -->
+      <div class="row-filter" id="hiragana-filter"></div>
+
+      <!-- Hiragana grid -->
+      <div class="hiragana-grid" id="hiragana-grid"></div>
+
+      <!-- Selected char detail panel -->
+      <div class="char-detail" id="char-detail" style="display:none">
+        <div class="char-detail-inner">
+          <button class="close-btn" id="close-char-detail">✕</button>
+          <div class="detail-char" id="detail-char"></div>
+          <div class="detail-romaji" id="detail-romaji"></div>
+          <div class="detail-row" id="detail-row"></div>
+          <button class="speak-detail-btn" id="speak-detail-btn">🔊 Listen</button>
+          <button class="practice-this-btn" id="practice-this-btn">Practice this →</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== PRACTICE SECTION ===== -->
+    <section class="section" id="section-practice">
+      <div class="section-header">
+        <h1>Practice <span class="subtitle">Recognition Quiz</span></h1>
+        <p class="section-desc">Identify the hiragana character shown. Track your accuracy!</p>
+      </div>
+
+      <div class="practice-controls">
+        <label class="control-label">Rows to practice:</label>
+        <div class="row-toggles" id="practice-row-toggles"></div>
+        <button class="btn-primary" id="start-practice-btn">Start Practice</button>
+      </div>
+
+      <div class="quiz-box" id="quiz-box" style="display:none">
+        <div class="quiz-stats-bar">
+          <span>Score: <b id="quiz-score">0</b></span>
+          <span>Accuracy: <b id="quiz-acc">—</b></span>
+          <span>Question: <b id="quiz-qnum">1</b>/20</span>
+        </div>
+        <div class="quiz-progress-bar"><div class="quiz-progress-fill" id="quiz-progress-fill"></div></div>
+
+        <div class="quiz-card">
+          <div class="quiz-char" id="quiz-char"></div>
+          <div class="quiz-hint" id="quiz-hint">What is the reading?</div>
+        </div>
+
+        <div class="quiz-options" id="quiz-options"></div>
+        <div class="quiz-feedback" id="quiz-feedback"></div>
+        <button class="btn-ghost" id="quiz-next-btn" style="display:none">Next →</button>
+      </div>
+
+      <div class="quiz-result" id="quiz-result" style="display:none">
+        <div class="result-emoji" id="result-emoji">🎉</div>
+        <div class="result-score-big" id="result-score-big"></div>
+        <div class="result-details" id="result-details"></div>
+        <div class="weak-areas" id="weak-areas"></div>
+        <button class="btn-primary" id="retry-btn">Try Again</button>
+      </div>
+    </section>
+
+    <!-- ===== WORDS SECTION ===== -->
+    <section class="section" id="section-words">
+      <div class="section-header">
+        <h1>単語 <span class="subtitle">Vocabulary</span></h1>
+        <p class="section-desc">Build your Japanese vocabulary with these essential words.</p>
+      </div>
+
+      <div class="words-toolbar">
+        <input type="text" class="search-bar" id="word-search" placeholder="Search words…" />
+        <div class="cat-filters" id="word-cat-filters"></div>
+      </div>
+
+      <div class="words-grid" id="words-grid"></div>
+    </section>
+
+    <!-- ===== SENTENCES SECTION ===== -->
+    <section class="section" id="section-sentences">
+      <div class="section-header">
+        <h1>文 <span class="subtitle">Sentences</span></h1>
+        <p class="section-desc">Read and listen to real Japanese sentences.</p>
+      </div>
+      <div class="sentences-list" id="sentences-list"></div>
+    </section>
+
+    <!-- ===== GRAMMAR SECTION ===== -->
+    <section class="section" id="section-grammar">
+      <div class="section-header">
+        <h1>文法 <span class="subtitle">Grammar</span></h1>
+        <p class="section-desc">Essential Japanese grammar patterns explained simply.</p>
+      </div>
+      <div class="grammar-list" id="grammar-list"></div>
+    </section>
+
+    <!-- ===== TESTS SECTION ===== -->
+    <section class="section" id="section-tests">
+      <div class="section-header">
+        <h1>テスト <span class="subtitle">Tests & Quizzes</span></h1>
+        <p class="section-desc">Test everything you've learned!</p>
+      </div>
+
+      <!-- Test picker -->
+      <div class="test-picker" id="test-picker">
+        <div class="test-card-pick" data-test="hiragana-recog">
+          <div class="test-pick-icon">あ</div>
+          <div class="test-pick-title">Hiragana Recognition</div>
+          <div class="test-pick-desc">Identify characters</div>
+        </div>
+        <div class="test-card-pick" data-test="word-match">
+          <div class="test-pick-icon">語</div>
+          <div class="test-pick-title">Word Matching</div>
+          <div class="test-pick-desc">Match words & meanings</div>
+        </div>
+        <div class="test-card-pick" data-test="sentence-fill">
+          <div class="test-pick-icon">文</div>
+          <div class="test-pick-title">Fill the Blanks</div>
+          <div class="test-pick-desc">Complete sentences</div>
+        </div>
+        <div class="test-card-pick" data-test="grammar-mcq">
+          <div class="test-pick-icon">法</div>
+          <div class="test-pick-title">Grammar MCQ</div>
+          <div class="test-pick-desc">Multiple choice grammar</div>
+        </div>
+      </div>
+
+      <!-- Active test area -->
+      <div class="test-area" id="test-area" style="display:none">
+        <div class="test-meta-bar">
+          <span id="test-title-bar"></span>
+          <span>Time: <b id="test-timer">00:00</b></span>
+          <span>Q <b id="test-qnum">1</b>/<b id="test-qtotal">10</b></span>
+        </div>
+        <div class="test-progress-bar"><div class="test-progress-fill" id="test-progress-fill"></div></div>
+        <div class="test-question-box" id="test-question-box"></div>
+        <div class="test-options-box" id="test-options-box"></div>
+        <div class="test-feedback-box" id="test-feedback-box"></div>
+        <button class="btn-primary" id="test-next-btn" style="display:none">Next Question →</button>
+      </div>
+
+      <!-- Test results -->
+      <div class="test-results" id="test-results" style="display:none">
+        <div class="test-result-header">
+          <div class="result-big-emoji" id="test-result-emoji">🏆</div>
+          <div class="result-big-score" id="test-result-score"></div>
+        </div>
+        <div class="result-stats-grid">
+          <div class="result-stat"><div class="rs-val" id="rs-accuracy"></div><div class="rs-lbl">Accuracy</div></div>
+          <div class="result-stat"><div class="rs-val" id="rs-time"></div><div class="rs-lbl">Time</div></div>
+          <div class="result-stat"><div class="rs-val" id="rs-correct"></div><div class="rs-lbl">Correct</div></div>
+          <div class="result-stat"><div class="rs-val" id="rs-wrong"></div><div class="rs-lbl">Mistakes</div></div>
+        </div>
+        <div class="result-mistakes" id="result-mistakes"></div>
+        <div class="result-actions">
+          <button class="btn-primary" id="test-retry-btn">Retry</button>
+          <button class="btn-ghost" id="test-back-btn">Choose Test</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== PROGRESS SECTION ===== -->
+    <section class="section" id="section-progress">
+      <div class="section-header">
+        <h1>進歩 <span class="subtitle">Your Progress</span></h1>
+        <p class="section-desc">Track your learning journey.</p>
+      </div>
+
+      <div class="progress-overview">
+        <div class="progress-card">
+          <div class="prog-val" id="prog-xp">0</div>
+          <div class="prog-lbl">Total XP</div>
+        </div>
+        <div class="progress-card">
+          <div class="prog-val" id="prog-streak">0</div>
+          <div class="prog-lbl">Day Streak 🔥</div>
+        </div>
+        <div class="progress-card">
+          <div class="prog-val" id="prog-tests">0</div>
+          <div class="prog-lbl">Tests Taken</div>
+        </div>
+        <div class="progress-card">
+          <div class="prog-val" id="prog-mastered">0</div>
+          <div class="prog-lbl">Characters Mastered</div>
+        </div>
+      </div>
+
+      <div class="progress-section-title">Hiragana Mastery</div>
+      <div class="mastery-grid" id="mastery-grid"></div>
+
+      <div class="progress-section-title">Recent Test Scores</div>
+      <div class="score-history" id="score-history"></div>
+
+      <button class="btn-danger" id="reset-progress-btn">Reset All Progress</button>
+    </section>
+
+    <!-- ===== AI TOOLS SECTION ===== -->
+    <section class="section" id="section-ai">
+      <div class="section-header">
+        <h1>✦ AI Tools <span class="subtitle">Coming Soon</span></h1>
+        <p class="section-desc">Powerful AI features to supercharge your Japanese learning.</p>
+      </div>
+
+      <div class="ai-grid">
+        <div class="ai-card">
+          <div class="ai-icon">🎙️</div>
+          <div class="ai-title">Pronunciation Assistant</div>
+          <div class="ai-desc">Speak Japanese — AI grades your pronunciation accuracy in real time.</div>
+          <div class="ai-badge">Web Speech API + AI</div>
+          <button class="btn-ai-placeholder">Coming Soon</button>
+        </div>
+        <div class="ai-card">
+          <div class="ai-icon">💬</div>
+          <div class="ai-title">AI Chat Practice</div>
+          <div class="ai-desc">A beginner-friendly Japanese chatbot. Practice real conversations.</div>
+          <div class="ai-badge">LLM API</div>
+          <button class="btn-ai-placeholder">Coming Soon</button>
+        </div>
+        <div class="ai-card">
+          <div class="ai-icon">✍️</div>
+          <div class="ai-title">Sentence Generator</div>
+          <div class="ai-desc">Generate example sentences from any word you've learned.</div>
+          <div class="ai-badge">LLM API</div>
+          <button class="btn-ai-placeholder">Coming Soon</button>
+        </div>
+        <div class="ai-card">
+          <div class="ai-icon">🧠</div>
+          <div class="ai-title">Personalized Learning</div>
+          <div class="ai-desc">AI analyzes your weak areas and builds a custom study plan.</div>
+          <div class="ai-badge">ML + Progress Data</div>
+          <button class="btn-ai-placeholder">Coming Soon</button>
+        </div>
+        <div class="ai-card">
+          <div class="ai-icon">📝</div>
+          <div class="ai-title">AI Quiz Generator</div>
+          <div class="ai-desc">Auto-generate quizzes from any content you've studied.</div>
+          <div class="ai-badge">LLM API</div>
+          <button class="btn-ai-placeholder">Coming Soon</button>
+        </div>
+        <div class="ai-card">
+          <div class="ai-icon">🔍</div>
+          <div class="ai-title">Writing Correction</div>
+          <div class="ai-desc">Type Japanese — AI corrects grammar and suggests improvements.</div>
+          <div class="ai-badge">LLM API</div>
+          <button class="btn-ai-placeholder">Coming Soon</button>
+        </div>
+        <div class="ai-card">
+          <div class="ai-icon">📚</div>
+          <div class="ai-title">Daily Vocabulary AI</div>
+          <div class="ai-desc">Smart daily word recommendations based on your progress level.</div>
+          <div class="ai-badge">Recommendation Engine</div>
+          <button class="btn-ai-placeholder">Coming Soon</button>
+        </div>
+        <div class="ai-card">
+          <div class="ai-icon">🤖</div>
+          <div class="ai-title">Study Assistant</div>
+          <div class="ai-desc">Ask anything: "Explain this grammar", "Test me on hiragana".</div>
+          <div class="ai-badge">LLM API</div>
+          <button class="btn-ai-placeholder">Coming Soon</button>
+        </div>
+      </div>
+
+      <div class="ai-note">
+        <b>For developers:</b> Each AI card maps to a modular JS module in <code>script.js</code>.
+        Plug in your API key (OpenAI, Claude, Gemini) and the <code>AI_MODULES</code> object handles routing.
+        See comments in <code>script.js</code> for integration points.
+      </div>
+    </section>
+
+  </main>
+
+  <!-- XP Toast -->
+  <div class="xp-toast" id="xp-toast">+10 XP</div>
+
+  <script src="script.js"></script>
+</body>
+</html>
